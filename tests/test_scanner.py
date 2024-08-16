@@ -1,3 +1,4 @@
+import os
 import subprocess
 import unittest
 from unittest.mock import MagicMock, mock_open, patch
@@ -20,13 +21,13 @@ class TestScanner(unittest.TestCase):
     @patch("subprocess.check_output")
     def test_is_git_repo_valid(self, mock_check_output):
         mock_check_output.return_value = b"true\n"
-        self.assertTrue(is_git_repo("/some/valid/repo"))
+        self.assertTrue(is_git_repo(os.path.join("some", "valid", "repo")))
 
     @patch(
         "subprocess.check_output", side_effect=subprocess.CalledProcessError(1, "git")
     )
     def test_is_git_repo_invalid(self, mock_check_output):
-        self.assertFalse(is_git_repo("/some/invalid/repo"))
+        self.assertFalse(is_git_repo(os.path.join("some", "invalid", "repo")))
 
     @patch("guard.scanner.Github")
     def test_get_pr_changed_files(self, mock_github):
@@ -46,12 +47,12 @@ class TestScanner(unittest.TestCase):
     @patch("builtins.open", new_callable=mock_open, read_data="sample code")
     def test_scan_files(self, mock_open, mock_walk):
         mock_walk.return_value = [
-            ("/some/dir", ("subdir",), ("file1.py", "file2.py")),
+            (os.path.join("some", "dir"), ("subdir",), ("file1.py", "file2.py")),
         ]
         mock_ai_client = MagicMock()
         mock_ai_client.scan_code.return_value = "Scan result"
 
-        result = scan_files("/some/dir", mock_ai_client)
+        result = scan_files(os.path.join("some", "dir"), mock_ai_client)
         self.assertIn("Scan result", result)
         mock_ai_client.scan_code.assert_called_once()
 
@@ -59,9 +60,9 @@ class TestScanner(unittest.TestCase):
     @patch("os.chdir")
     def test_get_changed_files(self, mock_chdir, mock_check_output):
         mock_check_output.return_value = "file1.py\nfile2.py\n"
-        files = get_changed_files("/some/repo")
+        files = get_changed_files(os.path.join("some", "repo"))
         self.assertEqual(files, ["file1.py", "file2.py"])
-        mock_chdir.assert_called_once_with("/some/repo")
+        mock_chdir.assert_called_once_with(os.path.join("some", "repo"))
 
     @patch("guard.scanner.get_pr_changed_files")
     def test_fetch_changed_files_from_pr(self, mock_get_pr_changed_files):
@@ -72,7 +73,10 @@ class TestScanner(unittest.TestCase):
     @patch("builtins.open", new_callable=mock_open, read_data="sample code")
     @patch("os.path.isfile", return_value=True)
     def test_read_files_and_generate_summary(self, mock_isfile, mock_open):
-        file_paths = ["/some/repo/file1.py", "/some/repo/file2.py"]
+        file_paths = [
+            os.path.join("some", "repo", "file1.py"),
+            os.path.join("some", "repo", "file2.py"),
+        ]
 
         code_summary = read_files_and_generate_summary(file_paths)
 
@@ -80,13 +84,17 @@ class TestScanner(unittest.TestCase):
         self.assertIn("sample code", code_summary)
         self.assertIn("File: file2.py", code_summary)
 
-        mock_open.assert_any_call("/some/repo/file1.py", "r", encoding="utf-8")
-        mock_open.assert_any_call("/some/repo/file2.py", "r", encoding="utf-8")
+        mock_open.assert_any_call(
+            os.path.join("some", "repo", "file1.py"), "r", encoding="utf-8"
+        )
+        mock_open.assert_any_call(
+            os.path.join("some", "repo", "file2.py"), "r", encoding="utf-8"
+        )
 
     @patch("builtins.open", new_callable=mock_open, read_data="sample code")
     @patch("os.path.isfile", return_value=False)
     def test_read_files_and_generate_summary_invalid_file(self, mock_isfile, mock_open):
-        file_paths = ["/some/repo/invalid_file.py"]
+        file_paths = [os.path.join("some", "repo", "invalid_file.py")]
 
         code_summary = read_files_and_generate_summary(file_paths)
 
@@ -99,24 +107,26 @@ class TestScanner(unittest.TestCase):
         self, mock_isfile, mock_open
     ):
         mock_open.side_effect = UnicodeDecodeError("utf-8", b"", 0, 1, "decoding error")
-        file_paths = ["/some/repo/file1.py"]
+        file_paths = [os.path.join("some", "repo", "file1.py")]
 
         code_summary = read_files_and_generate_summary(file_paths)
 
         self.assertEqual(code_summary, "")
-        mock_open.assert_called_once_with("/some/repo/file1.py", "r", encoding="utf-8")
+        mock_open.assert_called_once_with(
+            os.path.join("some", "repo", "file1.py"), "r", encoding="utf-8"
+        )
 
     @patch("guard.scanner.is_git_repo", return_value=False)
     def test_fetch_changed_files_from_repo_invalid(self, mock_is_git_repo):
         with self.assertRaises(ValueError):
-            fetch_changed_files_from_repo("/invalid/repo")
+            fetch_changed_files_from_repo(os.path.join("invalid", "repo"))
 
     @patch("guard.scanner.is_git_repo", return_value=True)
     @patch("guard.scanner.get_changed_files", return_value=["file1.py", "file2.py"])
     def test_fetch_changed_files_from_repo_valid(
         self, mock_get_changed_files, mock_is_git_repo
     ):
-        files = fetch_changed_files_from_repo("/valid/repo")
+        files = fetch_changed_files_from_repo(os.path.join("valid", "repo"))
         self.assertEqual(files, ["file1.py", "file2.py"])
 
     @patch("builtins.open", new_callable=mock_open, read_data="sample code")
@@ -124,11 +134,17 @@ class TestScanner(unittest.TestCase):
     def test_generate_code_summary(self, mock_isfile, mock_open):
         changed_files = ["file1.py", "file2.py"]
 
-        code_summary = generate_code_summary("/some/repo", changed_files)
+        code_summary = generate_code_summary(
+            os.path.join("some", "repo"), changed_files
+        )
         self.assertIn("sample code", code_summary)
 
-        mock_open.assert_any_call("/some/repo/file1.py", "r", encoding="utf-8")
-        mock_open.assert_any_call("/some/repo/file2.py", "r", encoding="utf-8")
+        mock_open.assert_any_call(
+            os.path.join("some", "repo", "file1.py"), "r", encoding="utf-8"
+        )
+        mock_open.assert_any_call(
+            os.path.join("some", "repo", "file2.py"), "r", encoding="utf-8"
+        )
 
     @patch("guard.scanner.fetch_changed_files_from_pr")
     @patch("guard.scanner.generate_code_summary")
@@ -142,7 +158,7 @@ class TestScanner(unittest.TestCase):
         mock_ai_client.scan_code.return_value = "Scan result"
 
         result = scan_changes(
-            "/some/repo",
+            os.path.join("some", "repo"),
             mock_ai_client,
             repo="some/repo",
             pr_number=1,
@@ -161,7 +177,7 @@ class TestScanner(unittest.TestCase):
         mock_ai_client = MagicMock()
         mock_ai_client.scan_code.return_value = "Scan result"
 
-        result = scan_changes("/some/repo", mock_ai_client)
+        result = scan_changes(os.path.join("some", "repo"), mock_ai_client)
         self.assertIn("Scan result", result)
 
 

@@ -1,0 +1,37 @@
+[build-system]
+requires = ["setuptools>=61.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "GuardAI"
+version = "0.1.0"
+description = "A CLI tool for AI-powered code security scanning"
+readme = "README.md"
+authors = [{ name = "Best Olunusi", email = "olunusibest@gmail.com" }]
+license = { text = "MIT" }
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent"
+]
+keywords = ["security", "ai", "cli", "code scanning"]
+dependencies = [
+    "openai>=1.40.6",
+    "PyGithub",
+    "requests",
+    "google-generativeai",
+    "ipython"
+]
+requires-python = ">=3.10"
+
+[project.optional-dependencies]
+dev = ["pylint", "black", "isort"]
+
+[project.urls]
+Homepage = "https://github.com/codeguardai/guardai"
+
+[project.scripts]
+guardai = "guard.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["guard", "guard.*"]

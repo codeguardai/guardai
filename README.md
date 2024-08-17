@@ -1,3 +1,5 @@
+<p align="center"><img src="https://raw.githubusercontent.com/codeguardai/guardai/main/logo.png" width="150" ><br><h1 align="center">Code Security Vulnerabilities Scanner</h1></p>
+
 [![Release and Publish](https://github.com/codeguardai/guardai/actions/workflows/release-publish.yml/badge.svg)](https://github.com/codeguardai/guardai/actions/workflows/release-publish.yml)
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/codeguardai/guardai)
 ![GitHub issues](https://img.shields.io/github/issues/codeguardai/guardai)
@@ -98,4 +100,4 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 
 ## Contact
 
-For any inquiries or support, please contact [Best O](mailto:olunusibest@gmail.com).
+For any inquiries or support, please contact [B.O](mailto:olunusibest@gmail.com).

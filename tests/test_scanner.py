@@ -17,7 +17,6 @@ from guard.scanner import (
 
 
 class TestScanner(unittest.TestCase):
-
     @patch("subprocess.check_output")
     def test_is_git_repo_valid(self, mock_check_output):
         mock_check_output.return_value = b"true\n"

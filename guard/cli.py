@@ -6,11 +6,23 @@ a Git repository.
 """
 
 import argparse
+from importlib.metadata import PackageNotFoundError, version
 
 from IPython.display import display_markdown
 
 from guard.clients import CustomAIClient, GoogleClient, OpenAIClient
 from guard.scanner import scan_changes, scan_files
+
+
+def get_guardai_version():
+    """
+    Retrieves the version of the GuardAI package.
+    Returns "unknown" if the package is not found.
+    """
+    try:
+        return version("guardai")
+    except PackageNotFoundError:
+        return "unknown"
 
 
 def parse_arguments():
@@ -19,6 +31,14 @@ def parse_arguments():
     """
     parser = argparse.ArgumentParser(
         description="A CLI tool for AI-powered code security scanning"
+    )
+
+    parser.add_argument(
+        "-v",
+        "--version",
+        action="version",
+        version=f"GuardAI {get_guardai_version()}",
+        help="Show the version of the GuardAI tool and exit",
     )
 
     parser.add_argument(

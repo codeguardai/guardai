@@ -5,7 +5,6 @@ from guard.cli import format_as_markdown, initialize_client, scan
 
 
 class TestFunctions(unittest.TestCase):
-
     @patch("guard.cli.OpenAIClient")
     def test_initialize_client_openai(self, mock_openai_client):
         initialize_client("openai", None)

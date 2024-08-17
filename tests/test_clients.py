@@ -5,7 +5,6 @@ from guard.clients import BaseAIClient, CustomAIClient, GoogleClient, OpenAIClie
 
 
 class TestAIClients(unittest.TestCase):
-
     def test_base_ai_client_instantiation(self):
         with self.assertRaises(NotImplementedError):
             BaseAIClient()

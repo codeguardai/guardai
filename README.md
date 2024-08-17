@@ -1,3 +1,9 @@
+[![Release and Publish](https://github.com/codeguardai/guardai/actions/workflows/release-publish.yml/badge.svg)](https://github.com/codeguardai/guardai/actions/workflows/release-publish.yml)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/codeguardai/guardai)
+![GitHub issues](https://img.shields.io/github/issues/codeguardai/guardai)
+![GitHub pull requests](https://img.shields.io/github/issues-pr/codeguardai/guardai)
+![GitHub](https://img.shields.io/github/license/codeguardai/guardai)
+
 # GuardAI
 
 GuardAI leverages multiple AI models, including OpenAI, Gemini, and custom self-hosted AI servers, to scan code for security vulnerabilities. It is designed to integrate seamlessly into CI/CD pipelines, such as GitHub Actions, allowing developers to automatically analyze their code for potential security issues during the development process.
@@ -92,4 +98,4 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 
 ## Contact
 
-For any inquiries or support, please contact [Best Olunusi](mailto:olunusibest@gmail.com).
+For any inquiries or support, please contact [Best O](mailto:olunusibest@gmail.com).

@@ -10,6 +10,8 @@
 
 GuardAI leverages multiple AI models, including OpenAI, Gemini, and custom self-hosted AI servers, to scan code for security vulnerabilities. It is designed to integrate seamlessly into CI/CD pipelines, such as GitHub Actions, allowing developers to automatically analyze their code for potential security issues during the development process.
 
+Full Demo: https://github.com/codeguardai/demo
+
 ## Features
 
 - **Multi-AI Model Support:**

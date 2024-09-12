@@ -1,7 +1,13 @@
 import unittest
 from unittest.mock import MagicMock, patch
 
-from guard.clients import BaseAIClient, CustomAIClient, GoogleClient, OpenAIClient
+from guard.clients import (
+    BaseAIClient,
+    CustomAIClient,
+    GoogleClient,
+    GroqClient,
+    OpenAIClient,
+)
 
 
 class TestAIClients(unittest.TestCase):
@@ -29,6 +35,21 @@ class TestAIClients(unittest.TestCase):
         result = client.scan_code("sample code")
 
         self.assertEqual(result, "Mocked OpenAI response")
+        mock_client.chat.completions.create.assert_called_once()
+
+    @patch("guard.clients.groq.Groq")
+    @patch("os.getenv", return_value="fake_groq_api_key")
+    def test_openai_client_scan_code(self, mock_getenv, mock_groq):
+        mock_client = MagicMock()
+        mock_groq.return_value = mock_client
+        mock_client.chat.completions.create.return_value.choices = [
+            MagicMock(message=MagicMock(content="Mocked Groq response"))
+        ]
+
+        client = GroqClient(model="fake_model")
+        result = client.scan_code("sample code")
+
+        self.assertEqual(result, "Mocked Groq response")
         mock_client.chat.completions.create.assert_called_once()
 
     @patch("guard.clients.genai.GenerativeModel")

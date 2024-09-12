@@ -18,6 +18,7 @@ Full Demo: https://github.com/codeguardai/demo
 
   - **OpenAI Integration:** Scan your code using OpenAI's powerful models like GPT-4 to identify potential security vulnerabilities.
   - **Gemini Integration:** Leverage Gemini's capabilities to analyze code for security risks.
+  - **Groq Integration:** Uses Groq's Fast AI Inference
   - **Custom AI Server Integration:** Connect to a self-hosted or privately hosted AI server to perform security scans, allowing for fully customizable and self-hosted AI solutions.
 
 - **CI/CD Integration:**
@@ -37,6 +38,7 @@ Full Demo: https://github.com/codeguardai/demo
 - API keys for the supported AI models:
   - OpenAI API key
   - Gemini API key
+  - Groq API key
   - Access to a custom AI server (host, port, and optional token)
 
 ### Installation

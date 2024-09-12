@@ -10,7 +10,7 @@ from importlib.metadata import PackageNotFoundError, version
 
 from IPython.display import display_markdown
 
-from guard.clients import CustomAIClient, GoogleClient, OpenAIClient
+from guard.clients import CustomAIClient, GoogleClient, GroqClient, OpenAIClient
 from guard.scanner import scan_changes, scan_files
 
 
@@ -45,7 +45,7 @@ def parse_arguments():
         "--provider",
         type=str,
         required=True,
-        choices=["openai", "google", "custom"],
+        choices=["openai", "google", "groq", "custom"],
         help="Select the AI provider",
     )
     parser.add_argument(
@@ -97,12 +97,14 @@ def initialize_client(provider, model, host=None, port=None, token=None, endpoin
     clients = {
         "openai": OpenAIClient,
         "google": GoogleClient,
+        "groq": GroqClient,
         "custom": CustomAIClient,
     }
 
     default_models = {
         "openai": "gpt-4o-mini",
         "google": "gemini-pro",
+        "groq": "llama3-8b-8192",
     }
 
     if provider == "custom":

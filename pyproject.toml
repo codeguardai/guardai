@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "guardai"
-version = "0.1.1"
+version = "0.2.0"
 description = "A CLI tool for AI-powered code security scanning"
 readme = "README.md"
 authors = [{ name = "Best Olunusi", email = "olunusibest@gmail.com" }]

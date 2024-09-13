@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.0](https://github.com/codeguardai/guardai/compare/v0.1.1...v0.2.0) (2024-09-13)
+
+
+### Features
+
+* add support for groq ([#13](https://github.com/codeguardai/guardai/issues/13)) ([0be404e](https://github.com/codeguardai/guardai/commit/0be404ee00f482e68e8c0a0c1d6a8ff43fa14371))
+
 ## [0.1.1](https://github.com/codeguardai/guardai/compare/v0.1.0...v0.1.1) (2024-08-17)
 
 

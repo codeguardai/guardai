@@ -5,6 +5,7 @@ This module defines AI client classes for scanning code using different AI provi
 import os
 
 import google.generativeai as genai
+import groq
 import openai
 import requests
 
@@ -84,6 +85,42 @@ class GoogleClient(BaseAIClient):
                 + code_summary,
             )
             return response.text
+        except Exception as e:  # pylint: disable=W0718
+            return f"Error occurred: {e}"
+
+
+class GroqClient(BaseAIClient):
+    """Client for interacting with the Groq."""
+
+    def __init__(self, model):
+        """Initializes the Groq client with the given model."""
+
+        self.api_key = os.getenv("GROQ_API_KEY")
+        if not self.api_key:
+            raise ValueError("Groq API key is not set in the environment.")
+        self.client = groq.Groq(
+            api_key=self.api_key,
+        )
+        self.model = model
+
+    def scan_code(self, code_summary):
+        try:
+            response = self.client.chat.completions.create(
+                model=self.model,
+                messages=[
+                    {
+                        "role": "system",
+                        "content": """You are an expert in software security analysis, 
+                    adept at identifying and explaining potential vulnerabilities in code. You will be 
+                    given complete code snippets from various applications. Your task is to analyze 
+                    the provided code, pinpoint potential security risks, and offer clear suggestions 
+                    for enhancing the application's security posture. Focus on the critical issues that 
+                    could impact the overall security of the application.""",
+                    },
+                    {"role": "user", "content": code_summary},
+                ],
+            )
+            return response.choices[0].message.content
         except Exception as e:  # pylint: disable=W0718
             return f"Error occurred: {e}"
 
